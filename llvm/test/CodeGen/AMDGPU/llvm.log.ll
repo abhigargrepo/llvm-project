@@ -6163,6 +6163,7 @@ define half @v_log_f16(half %in) {
 ; GFX1100-GISEL-TRUE16:       ; %bb.0:
 ; GFX1100-GISEL-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX1100-GISEL-TRUE16-NEXT:    v_log_f16_e32 v0.l, v0.l
+; GFX1100-GISEL-TRUE16-NEXT:    ; implicit-def: $vgpr0_hi16
 ; GFX1100-GISEL-TRUE16-NEXT:    s_waitcnt_depctr 0xfff
 ; GFX1100-GISEL-TRUE16-NEXT:    v_mul_f16_e32 v0.l, 0x398c, v0.l
 ; GFX1100-GISEL-TRUE16-NEXT:    s_setpc_b64 s[30:31]
@@ -6243,6 +6244,7 @@ define half @v_log_fabs_f16(half %in) {
 ; GFX1100-GISEL-TRUE16:       ; %bb.0:
 ; GFX1100-GISEL-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX1100-GISEL-TRUE16-NEXT:    v_log_f16_e64 v0.l, |v0.l|
+; GFX1100-GISEL-TRUE16-NEXT:    ; implicit-def: $vgpr0_hi16
 ; GFX1100-GISEL-TRUE16-NEXT:    s_waitcnt_depctr 0xfff
 ; GFX1100-GISEL-TRUE16-NEXT:    v_mul_f16_e32 v0.l, 0x398c, v0.l
 ; GFX1100-GISEL-TRUE16-NEXT:    s_setpc_b64 s[30:31]
@@ -6324,6 +6326,7 @@ define half @v_log_fneg_fabs_f16(half %in) {
 ; GFX1100-GISEL-TRUE16:       ; %bb.0:
 ; GFX1100-GISEL-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX1100-GISEL-TRUE16-NEXT:    v_log_f16_e64 v0.l, -|v0.l|
+; GFX1100-GISEL-TRUE16-NEXT:    ; implicit-def: $vgpr0_hi16
 ; GFX1100-GISEL-TRUE16-NEXT:    s_waitcnt_depctr 0xfff
 ; GFX1100-GISEL-TRUE16-NEXT:    v_mul_f16_e32 v0.l, 0x398c, v0.l
 ; GFX1100-GISEL-TRUE16-NEXT:    s_setpc_b64 s[30:31]
@@ -6406,6 +6409,7 @@ define half @v_log_fneg_f16(half %in) {
 ; GFX1100-GISEL-TRUE16:       ; %bb.0:
 ; GFX1100-GISEL-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX1100-GISEL-TRUE16-NEXT:    v_log_f16_e64 v0.l, -v0.l
+; GFX1100-GISEL-TRUE16-NEXT:    ; implicit-def: $vgpr0_hi16
 ; GFX1100-GISEL-TRUE16-NEXT:    s_waitcnt_depctr 0xfff
 ; GFX1100-GISEL-TRUE16-NEXT:    v_mul_f16_e32 v0.l, 0x398c, v0.l
 ; GFX1100-GISEL-TRUE16-NEXT:    s_setpc_b64 s[30:31]
@@ -6485,6 +6489,7 @@ define half @v_log_f16_fast(half %in) {
 ; GFX1100-GISEL-TRUE16:       ; %bb.0:
 ; GFX1100-GISEL-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
 ; GFX1100-GISEL-TRUE16-NEXT:    v_log_f16_e32 v0.l, v0.l
+; GFX1100-GISEL-TRUE16-NEXT:    ; implicit-def: $vgpr0_hi16
 ; GFX1100-GISEL-TRUE16-NEXT:    s_waitcnt_depctr 0xfff
 ; GFX1100-GISEL-TRUE16-NEXT:    v_mul_f16_e32 v0.l, 0x398c, v0.l
 ; GFX1100-GISEL-TRUE16-NEXT:    s_setpc_b64 s[30:31]
@@ -7283,6 +7288,7 @@ define <3 x half> @v_log_v3f16(<3 x half> %in) {
 ; GFX1100-SDAG-TRUE16-NEXT:    v_log_f16_e32 v0.l, v0.l
 ; GFX1100-SDAG-TRUE16-NEXT:    v_log_f16_e32 v0.h, v0.h
 ; GFX1100-SDAG-TRUE16-NEXT:    v_log_f16_e32 v1.l, v1.l
+; GFX1100-SDAG-TRUE16-NEXT:    ; implicit-def: $vgpr1_hi16
 ; GFX1100-SDAG-TRUE16-NEXT:    s_delay_alu instid0(TRANS32_DEP_3) | instskip(SKIP_3) | instid1(VALU_DEP_2)
 ; GFX1100-SDAG-TRUE16-NEXT:    v_mul_f16_e32 v0.l, 0x398c, v0.l
 ; GFX1100-SDAG-TRUE16-NEXT:    s_waitcnt_depctr 0xfff
@@ -7313,6 +7319,7 @@ define <3 x half> @v_log_v3f16(<3 x half> %in) {
 ; GFX1100-GISEL-TRUE16-NEXT:    v_log_f16_e32 v0.l, v0.l
 ; GFX1100-GISEL-TRUE16-NEXT:    v_log_f16_e32 v0.h, v0.h
 ; GFX1100-GISEL-TRUE16-NEXT:    v_log_f16_e32 v1.l, v1.l
+; GFX1100-GISEL-TRUE16-NEXT:    ; implicit-def: $vgpr1_hi16
 ; GFX1100-GISEL-TRUE16-NEXT:    s_delay_alu instid0(TRANS32_DEP_3) | instskip(SKIP_3) | instid1(VALU_DEP_2)
 ; GFX1100-GISEL-TRUE16-NEXT:    v_mul_f16_e32 v0.l, 0x398c, v0.l
 ; GFX1100-GISEL-TRUE16-NEXT:    s_waitcnt_depctr 0xfff
@@ -7416,6 +7423,7 @@ define <3 x half> @v_log_v3f16_fast(<3 x half> %in) {
 ; GFX1100-SDAG-TRUE16-NEXT:    v_log_f16_e32 v0.l, v0.l
 ; GFX1100-SDAG-TRUE16-NEXT:    v_log_f16_e32 v0.h, v0.h
 ; GFX1100-SDAG-TRUE16-NEXT:    v_log_f16_e32 v1.l, v1.l
+; GFX1100-SDAG-TRUE16-NEXT:    ; implicit-def: $vgpr1_hi16
 ; GFX1100-SDAG-TRUE16-NEXT:    s_delay_alu instid0(TRANS32_DEP_3) | instskip(SKIP_3) | instid1(VALU_DEP_2)
 ; GFX1100-SDAG-TRUE16-NEXT:    v_mul_f16_e32 v0.l, 0x398c, v0.l
 ; GFX1100-SDAG-TRUE16-NEXT:    s_waitcnt_depctr 0xfff
@@ -7446,6 +7454,7 @@ define <3 x half> @v_log_v3f16_fast(<3 x half> %in) {
 ; GFX1100-GISEL-TRUE16-NEXT:    v_log_f16_e32 v0.l, v0.l
 ; GFX1100-GISEL-TRUE16-NEXT:    v_log_f16_e32 v0.h, v0.h
 ; GFX1100-GISEL-TRUE16-NEXT:    v_log_f16_e32 v1.l, v1.l
+; GFX1100-GISEL-TRUE16-NEXT:    ; implicit-def: $vgpr1_hi16
 ; GFX1100-GISEL-TRUE16-NEXT:    s_delay_alu instid0(TRANS32_DEP_3) | instskip(SKIP_3) | instid1(VALU_DEP_2)
 ; GFX1100-GISEL-TRUE16-NEXT:    v_mul_f16_e32 v0.l, 0x398c, v0.l
 ; GFX1100-GISEL-TRUE16-NEXT:    s_waitcnt_depctr 0xfff
