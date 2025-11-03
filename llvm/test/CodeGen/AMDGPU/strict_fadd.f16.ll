@@ -282,14 +282,13 @@ define <3 x half> @v_constained_fadd_v3f16_fpexcept_strict(<3 x half> %x, <3 x h
 ; GFX8-SDAG-NEXT:    v_add_f16_e32 v1, v1, v3
 ; GFX8-SDAG-NEXT:    s_setpc_b64 s[30:31]
 ;
-; GFX8-GISEL-LABEL: v_constained_fadd_v3f16_fpexcept_strict:
-; GFX8-GISEL:       ; %bb.0:
-; GFX8-GISEL-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
-; GFX8-GISEL-NEXT:    v_add_f16_e32 v4, v0, v2
-; GFX8-GISEL-NEXT:    v_add_f16_sdwa v0, v0, v2 dst_sel:WORD_1 dst_unused:UNUSED_PAD src0_sel:WORD_1 src1_sel:WORD_1
-; GFX8-GISEL-NEXT:    v_add_f16_e32 v1, v1, v3
-; GFX8-GISEL-NEXT:    v_or_b32_e32 v0, v4, v0
-; GFX8-GISEL-NEXT:    s_setpc_b64 s[30:31]
+; GFX11-TRUE16-LABEL: v_constained_fadd_v3f16_fpexcept_strict:
+; GFX11-TRUE16:       ; %bb.0:
+; GFX11-TRUE16-NEXT:    s_waitcnt vmcnt(0) expcnt(0) lgkmcnt(0)
+; GFX11-TRUE16-NEXT:    v_pk_add_f16 v0, v0, v2
+; GFX11-TRUE16-NEXT:    v_add_f16_e32 v1.l, v1.l, v3.l
+; GFX11-TRUE16-NEXT:    ; implicit-def: $vgpr1_hi16
+; GFX11-TRUE16-NEXT:    s_setpc_b64 s[30:31]
 ;
 ; GFX10-SDAG-LABEL: v_constained_fadd_v3f16_fpexcept_strict:
 ; GFX10-SDAG:       ; %bb.0:
