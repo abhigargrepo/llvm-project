@@ -1239,14 +1239,24 @@ private:
       } else {
         // The value is live in to OldIdx
         LiveRange::iterator INext = std::next(OldIdxOut);
-        assert(INext != E && "Must have following segment");
-        // We merge OldIdxOut and its successor. As we're dealing with subreg
-        // reordering, there is always a successor to OldIdxOut in the same BB
-        // We don't need INext->valno anymore and will reuse for the new segment
-        // we create later.
-        DefVNI = OldIdxVNI;
-        INext->start = OldIdxOut->end;
-        INext->valno->def = INext->start;
+        // As we're dealing with subreg reordering, there is usually a successor
+        // to OldIdxOut in the same BB. However, if OldIdxOut is the last segment
+        // (e.g., from an IMPLICIT_DEF), we need to handle it differently.
+        if (INext != E) {
+          // We merge OldIdxOut and its successor.
+          // We don't need INext->valno anymore and will reuse for the new segment
+          // we create later.
+          DefVNI = OldIdxVNI;
+          INext->start = OldIdxOut->end;
+          INext->valno->def = INext->start;
+        } else {
+          // OldIdxOut is the last segment. Since OldIdxOut->end is before NewIdxDef
+          // and there's no following segment, we need to extend OldIdxOut to NewIdxDef
+          // and let the code below handle creating a new segment at NewIdxDef.
+          DefVNI = OldIdxVNI;
+          // Extend OldIdxOut to NewIdxDef so that AfterNewIdx calculation works correctly.
+          OldIdxOut->end = NewIdxDef;
+        }
       }
       // If NewIdx is behind the last segment, extend that and append a new one.
       if (AfterNewIdx == E) {
@@ -1261,8 +1271,11 @@ private:
                                          DefVNI);
         DefVNI->def = NewIdxDef;
 
-        LiveRange::iterator Prev = std::prev(NewSegment);
-        Prev->end = NewIdxDef;
+        // Update the previous segment to end at NewIdxDef, if it exists.
+        if (NewSegment != LR.begin()) {
+          LiveRange::iterator Prev = std::prev(NewSegment);
+          Prev->end = NewIdxDef;
+        }
       } else {
         // OldIdxOut is undef at this point, Slide (OldIdxOut;AfterNewIdx] up
         // one position.
