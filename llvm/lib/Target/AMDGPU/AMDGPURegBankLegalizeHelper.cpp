@@ -11,9 +11,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "AMDGPURegBankLegalizeHelper.h"
 #include "AMDGPUGlobalISelUtils.h"
 #include "AMDGPUInstrInfo.h"
+#include "AMDGPURegBankLegalizeHelper.h"
 #include "AMDGPURegBankLegalizeRules.h"
 #include "AMDGPURegisterBankInfo.h"
 #include "GCNSubtarget.h"
@@ -638,23 +638,27 @@ void RegBankLegalizeHelper::lowerSplitTo16(MachineInstr &MI) {
   assert(MRI.getType(Dst) == V2S16);
   unsigned Opc = MI.getOpcode();
   auto Flags = MI.getFlags();
-
+  MachineInstrBuilder Lo, Hi;
+  
   if (MI.getNumOperands() == 2) {
     auto [Op1Lo, Op1Hi] = unpackAExtTruncS16(MI.getOperand(1).getReg());
-    auto Lo = B.buildInstr(Opc, {SgprRB_S16}, {Op1Lo}, Flags);
-    auto Hi = B.buildInstr(Opc, {SgprRB_S16}, {Op1Hi}, Flags);
-    B.buildMergeLikeInstr(Dst, {Lo, Hi});
-    MI.eraseFromParent();
-    return;
+    Lo = B.buildInstr(Opc, {SgprRB_S16}, {Op1Lo}, Flags);
+    Hi = B.buildInstr(Opc, {SgprRB_S16}, {Op1Hi}, Flags);
+  } else if (MI.getNumOperands() == 3) {
+    auto [Op1Lo, Op1Hi] = unpackAExtTruncS16(MI.getOperand(1).getReg());
+    auto [Op2Lo, Op2Hi] = unpackAExtTruncS16(MI.getOperand(2).getReg());
+    Lo = B.buildInstr(Opc, {SgprRB_S16}, {Op1Lo, Op2Lo}, Flags);
+    Hi = B.buildInstr(Opc, {SgprRB_S16}, {Op1Hi, Op2Hi}, Flags);
+  } else if (MI.getNumOperands() == 4) {
+    auto [Op1Lo, Op1Hi] = unpackAExtTruncS16(MI.getOperand(1).getReg());
+    auto [Op2Lo, Op2Hi] = unpackAExtTruncS16(MI.getOperand(2).getReg());
+    auto [Op3Lo, Op3Hi] = unpackAExtTruncS16(MI.getOperand(3).getReg());
+    Lo = B.buildInstr(Opc, {SgprRB_S16}, {Op1Lo, Op2Lo, Op3Lo}, Flags);
+    Hi = B.buildInstr(Opc, {SgprRB_S16}, {Op1Hi, Op2Hi, Op3Hi}, Flags);
   }
-
-  assert(MI.getNumOperands() == 3);
-  auto [Op1Lo, Op1Hi] = unpackAExtTruncS16(MI.getOperand(1).getReg());
-  auto [Op2Lo, Op2Hi] = unpackAExtTruncS16(MI.getOperand(2).getReg());
-  auto Lo = B.buildInstr(Opc, {SgprRB_S16}, {Op1Lo, Op2Lo}, Flags);
-  auto Hi = B.buildInstr(Opc, {SgprRB_S16}, {Op1Hi, Op2Hi}, Flags);
   B.buildMergeLikeInstr(Dst, {Lo, Hi});
   MI.eraseFromParent();
+  return;
 }
 
 void RegBankLegalizeHelper::lowerSplitTo32Select(MachineInstr &MI) {
