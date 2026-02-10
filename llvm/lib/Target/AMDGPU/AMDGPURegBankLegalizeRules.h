@@ -56,6 +56,7 @@ enum UniformityLLTOpPredicateID {
   DivS16,
   DivS32,
   DivS64,
+  DivS96,
   DivS128,
 
   // pointers
@@ -100,10 +101,12 @@ enum UniformityLLTOpPredicateID {
 
   UniV2S16,
   UniV2S32,
+  UniV4S32,
   UniV2S64,
 
   DivV2S16,
   DivV2S32,
+  DivV4S32,
   DivV2S64,
   DivV3S32,
   DivV4S16,
@@ -178,6 +181,7 @@ enum RegBankLLTMappingApplyID {
   Vgpr16,
   Vgpr32,
   Vgpr64,
+  Vgpr96,
   Vgpr128,
   VgprP0,
   VgprP1,
@@ -279,6 +283,7 @@ enum LoweringMethodID {
   ScalarizeToS16,
   SplitTo32Select,
   SplitTo32SExtInReg,
+  S_BUF_to_BUF,
   Ext32To64,
   UniCstExt,
   SplitLoad,
