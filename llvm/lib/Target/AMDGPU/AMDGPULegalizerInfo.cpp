@@ -7515,6 +7515,13 @@ bool AMDGPULegalizerInfo::legalizeSBufferLoad(LegalizerHelper &Helper,
     // The 8-bit and 16-bit scalar buffer load instructions have 32-bit
     // destination register.
     Dst = B.getMRI()->createGenericVirtualRegister(LLT::scalar(32));
+  } else if (Size < 32) {
+    // No native sub-dword scalar buffer load on this subtarget.
+    // Widen to a 32-bit load; a G_TRUNC is inserted after to recover the
+    // original narrow type. s8/s16 are not valid SGPR register types.
+    assert(Size == 8 || Size == 16);
+    Opc = AMDGPU::G_AMDGPU_S_BUFFER_LOAD;
+    Dst = B.getMRI()->createGenericVirtualRegister(LLT::scalar(32));
   } else {
     Opc = AMDGPU::G_AMDGPU_S_BUFFER_LOAD;
     Dst = OrigDst;
